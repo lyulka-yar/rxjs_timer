@@ -27,13 +27,11 @@ const App = () => {
             filter((clicks) => clicks === 2)
         );
         let status = true;
-        // can`t resolve problem with button RESET doesn`t reset state value and restarts timer
 
         start$.subscribe(() => {
             seconds$
                 .pipe(
                     takeUntil(start$),
-                    takeUntil(reset$),
                     takeUntil(stop$),
                     takeUntil(wait$),
                     takeWhile(()=> status)
@@ -42,7 +40,7 @@ const App = () => {
                     setTimeState({...tmpTime});
 
                     switch (true) {
-                        case tmpTime.h === 0 && tmpTime.m === 0 && tmpTime.s === 5:
+                        case tmpTime.h === 60 && tmpTime.m === 0 && tmpTime.s === 0:
                             status = false;
                             tmpTime = {h: 0, m: 0, s: 0};
                             setTimeState({h: 0, m: 0, s: 0});
@@ -68,6 +66,7 @@ const App = () => {
         });
 
         reset$.subscribe(() => {
+            tmpTime = {h: 0, m: 0, s: 0};
             setTimeState({h: 0, m: 0, s: 0});
         });
 
